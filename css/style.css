@@ -1,0 +1,274 @@
+/* ===== 全局 ===== */
+:root {
+  --primary: #8B2500;
+  --primary-light: #C0392B;
+  --primary-dark: #5A1A00;
+  --accent: #E74C3C;
+  --warm-bg: #FFF5EE;
+  --warm-card: #FFFFFF;
+  --warm-border: #D4A574;
+  --text-main: #333333;
+  --text-sub: #666666;
+  --text-light: #999999;
+  --shadow: 0 2px 12px rgba(139,37,0,0.12);
+  --radius: 12px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--warm-bg);
+  color: var(--text-main);
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+  max-width: 520px;
+  margin: 0 auto;
+  min-height: 100vh;
+  padding-bottom: 60px;
+}
+
+/* ===== 顶部装饰条 ===== */
+.top-bar {
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary), var(--accent));
+  color: #fff;
+  padding: 12px 16px;
+  text-align: center;
+  font-size: 15px;
+  letter-spacing: 1px;
+}
+.top-bar-inner { display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; }
+.top-bar-icon { font-size: 20px; }
+.top-bar-text { font-weight: 700; font-size: 16px; }
+.top-bar-tag {
+  font-size: 12px;
+  background: rgba(255,255,255,0.25);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+/* ===== 店招 ===== */
+.shop-header {
+  background: var(--warm-card);
+  margin: 12px;
+  padding: 16px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.shop-logo-wrap {
+  width: 56px; height: 56px;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 28px;
+  flex-shrink: 0;
+}
+.shop-info { flex: 1; }
+.shop-name { font-size: 18px; font-weight: 700; color: var(--primary); margin-bottom: 2px; }
+.shop-sub { font-size: 12px; color: var(--text-light); margin-bottom: 4px; }
+.shop-addr { font-size: 13px; color: var(--text-sub); line-height: 1.5; }
+.shop-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+.shop-tag {
+  font-size: 11px;
+  background: rgba(139,37,0,0.08);
+  color: var(--primary);
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid rgba(139,37,0,0.15);
+}
+
+/* ===== 平台选择 ===== */
+.platform-section {
+  margin: 12px 16px;
+}
+.platform-label { font-size: 14px; font-weight: 600; color: var(--text-main); margin-bottom: 8px; }
+.platform-btns { display: flex; gap: 12px; }
+.platform-btn {
+  flex: 1;
+  padding: 10px 0;
+  border: 2px solid var(--warm-border);
+  border-radius: var(--radius);
+  background: var(--warm-card);
+  color: var(--text-sub);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.platform-btn.active {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+  box-shadow: 0 4px 12px rgba(139,37,0,0.3);
+}
+.platform-btn:hover:not(.active) {
+  border-color: var(--primary-light);
+  color: var(--primary-light);
+}
+
+/* ===== 生成按钮 ===== */
+.generate-section {
+  margin: 20px 16px;
+  text-align: center;
+}
+.generate-btn {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  padding: 14px 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.3s;
+  box-shadow: 0 6px 20px rgba(139,37,0,0.35);
+}
+.generate-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(139,37,0,0.45);
+}
+.generate-btn:active {
+  transform: translateY(0);
+}
+.btn-shine {
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  animation: shine 3s infinite;
+}
+@keyframes shine {
+  0% { left: -100%; }
+  50% { left: 100%; }
+  100% { left: 100%; }
+}
+
+/* ===== 结果卡片 ===== */
+.result-card {
+  background: var(--warm-card);
+  margin: 16px;
+  padding: 16px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(139,37,0,0.1);
+}
+.result-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.result-platform {
+  font-size: 13px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: var(--primary);
+  color: #fff;
+}
+.result-dimension {
+  font-size: 12px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: rgba(139,37,0,0.1);
+  color: var(--primary);
+  border: 1px solid rgba(139,37,0,0.2);
+}
+.result-content {
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--text-main);
+  padding: 12px;
+  background: var(--warm-bg);
+  border-radius: 8px;
+  margin-bottom: 12px;
+  word-break: break-all;
+}
+.result-actions {
+  display: flex;
+  gap: 12px;
+}
+.copy-btn, .change-btn {
+  flex: 1;
+  padding: 10px 0;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s;
+}
+.copy-btn {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  box-shadow: 0 3px 8px rgba(139,37,0,0.25);
+}
+.copy-btn:hover { background: var(--primary-light); }
+.change-btn {
+  background: var(--warm-card);
+  color: var(--primary);
+  border: 2px solid var(--primary);
+}
+.change-btn:hover {
+  background: rgba(139,37,0,0.06);
+}
+
+/* ===== 二维码 ===== */
+.qrcode-section {
+  margin: 16px;
+  text-align: center;
+}
+.qrcode-label { font-size: 13px; color: var(--text-sub); margin-bottom: 8px; }
+.qrcode-wrap {
+  display: inline-block;
+  background: #fff;
+  padding: 12px;
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+}
+
+/* ===== 底部计数 ===== */
+.footer-counter {
+  text-align: center;
+  padding: 16px;
+  font-size: 13px;
+  color: var(--text-light);
+}
+.footer-counter span { color: var(--primary); font-weight: 700; }
+
+/* ===== Toast ===== */
+.toast {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--primary);
+  color: #fff;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 14px;
+  opacity: 0;
+  transition: all 0.3s;
+  z-index: 999;
+  pointer-events: none;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ===== 响应式 ===== */
+@media (max-width: 520px) {
+  body { max-width: 100%; }
+}
+@media (min-width: 521px) {
+  body {
+    border-left: 1px solid rgba(139,37,0,0.08);
+    border-right: 1px solid rgba(139,37,0,0.08);
+  }
+}

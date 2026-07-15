@@ -1,0 +1,11 @@
+# WorkBuddy internal files
+.workbuddy/
+
+# Temp data files (merged into data.js)
+data/part*.js
+data/combined_raw.js
+data/merge.py
+
+# OS files
+Thumbs.db
+Desktop.ini
