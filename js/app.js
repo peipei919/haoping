@@ -69,67 +69,108 @@
     const lastChar = s.slice(-1);
     if (/[。！？!?]/.test(lastChar)) return s;
     // 随机选句号或感叹号
-    return s + (Math.random() < 0.7 ? '，' : '！');
+    return s + (Math.random() < 0.7 ? '。' : '！');
+  }
+
+  // 确保句子有连接标点（逗号，用于句间衔接）
+  function ensureComma(str) {
+    const s = str.trim();
+    if (!s) return s;
+    const lastChar = s.slice(-1);
+    if (/[，,；;]/.test(lastChar)) return s;
+    return s + '，';
+  }
+
+  // 加权随机选维度：入户效果权重高，安装权重低
+  function pickWeightedDimensions() {
+    // 权重配置：入户效果(效果好)权重5，安装权重1，其余权重2
+    const weights = {
+      '效果好': 5,
+      '安装专业': 1,
+      '价格实惠': 2, '质量过硬': 2, '款式好看': 2, '服务热情': 2,
+      '送货快': 2, '店铺环境好': 2, '品牌信誉': 2, '售后无忧': 2,
+      '自建卖场': 2, '交通便利': 2, '品类齐全': 2, '性价比高': 2,
+      '回头客': 2, '老店口碑': 2, '朋友推荐': 2
+    };
+
+    // 加权随机抽取1-2个维度（70%选2个，30%选1个）
+    const count = Math.random() < 0.7 ? 2 : 1;
+    const allKeys = DIMENSIONS.map(d => d.key);
+    const picked = [];
+
+    for (let i = 0; i < count; i++) {
+      // 计算剩余维度的总权重
+      const remaining = allKeys.filter(k => !picked.includes(k));
+      const totalWeight = remaining.reduce((sum, k) => sum + weights[k], 0);
+
+      // 加权随机选一个
+      let rand = Math.random() * totalWeight;
+      let chosen = remaining[0];
+      for (const k of remaining) {
+        rand -= weights[k];
+        if (rand <= 0) { chosen = k; break; }
+      }
+      picked.push(chosen);
+    }
+    return picked;
   }
 
   // 生成好评
   function generateReview() {
-    // 随机选1-2个维度（60%选2个，40%选1个）
-    const allKeys = DIMENSIONS.map(d => d.key);
-    const count = Math.random() < 0.6 ? 2 : 1;
-    const dims = shuffle(allKeys).slice(0, count);
+    const dims = pickWeightedDimensions();
 
-    // 收集维度标签（仅用于结果卡片显示，不追加到好评正文）
-
-    // 组合好评：开头 + 维度1评价 + (维度2评价) + 安装评价(可选) + 结尾
+    // 组合好评：开头 + 维度评价 + (安装评价，低概率) + 结尾
     const opening = pickRandom(REVIEW_DATA.openings);
     const dimParts = dims.map(d => pickRandom(REVIEW_DATA.dimensions[d]));
 
-    // 约40%概率加上安装评价
-    const installPart = Math.random() < 0.4 ? pickRandom(REVIEW_DATA.installations) : '';
+    // 安装评价：仅15%概率出现，且最多一句
+    const includeInstall = Math.random() < 0.15;
+    const installPart = includeInstall ? pickRandom(REVIEW_DATA.installations) : '';
 
     const closing = pickRandom(REVIEW_DATA.closings);
 
-    // 组合全文，加入标点符号
+    // 组合全文，确保逻辑连贯和标点正确
     let parts = [];
 
-    // 开头：加逗号结尾，自然引出下文
+    // 开头：自然引出，逗号衔接
     let op = opening.trim();
-    if (!endsWithPunctuation(op)) op += '，';
+    op = ensureComma(op);
     parts.push(op);
 
-    // 维度评价1：以逗号或句号连接
+    // 维度评价段落
+    // 第一段维度：以逗号衔接（后面还有内容），或句号结束
     let d1 = dimParts[0].trim();
-    if (!endsWithPunctuation(d1)) {
-      // 如果还有第二段或安装段，用逗号；否则用句号
-      d1 += (dimParts.length > 1 || installPart) ? '，' : '。';
+    if (dimParts.length > 1 || installPart) {
+      d1 = ensureComma(d1);
+    } else {
+      d1 = ensureEndPunctuation(d1);
     }
     parts.push(d1);
 
-    // 维度评价2（如果有）
+    // 第二段维度（如果有）：逗号衔接或句号结束
     if (dimParts.length > 1) {
       let d2 = dimParts[1].trim();
-      if (!endsWithPunctuation(d2)) {
-        d2 += installPart ? '，' : '。';
+      if (installPart) {
+        d2 = ensureComma(d2);
+      } else {
+        d2 = ensureEndPunctuation(d2);
       }
       parts.push(d2);
     }
 
-    // 安装评价（如果有）
+    // 安装评价（如果有）：逗号衔接到结尾
     if (installPart) {
       let ip = installPart.trim();
-      if (!endsWithPunctuation(ip)) ip += '，';
+      ip = ensureComma(ip);
       parts.push(ip);
     }
 
-    // 结尾：确保以句末标点结束
+    // 结尾：以句末标点收束
     let cl = closing.trim();
-    if (!endsWithPunctuation(cl)) {
-      cl += Math.random() < 0.7 ? '！' : '。';
-    }
+    cl = ensureEndPunctuation(cl);
     parts.push(cl);
 
-    // 拼接全文（不再追加标签）
+    // 拼接全文
     currentReview = parts.filter(p => p && p.trim()).join('');
 
     // 生成维度标签用于结果卡片显示
